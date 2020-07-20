@@ -1,5 +1,6 @@
 <?php 
 
+  // Check for GET paramter
   if(!isset($_GET['name']) || strlen($_GET['name']) < 1) {
     die("Name paramter missing");
   }
@@ -10,8 +11,9 @@
   }
 
   $names = array("Rock", "Paper", "Scissors");
+  // Check if input has been given
   $human = isset($_POST['human']) ? $_POST['human'] + 0 : -1;
-  $computer = rand(0,2);
+  $computer = rand(0,2); // Generate random play for computer
 
   function check($computer, $human) {
      if($human == $computer) {
@@ -23,6 +25,7 @@
     } 
   }
 
+  // Call function to display result
   $result = check($computer, $human);    
 
 ?>
@@ -40,11 +43,12 @@
 <body>
   <div class="container">
     <h1>Rock Paper Scissors</h1>
+    <!-- Display Username -->
     <p>Welcome : <?= htmlentities($_GET['name']); ?></p>
 
     <form method="POST">
       <select name="human" class="form-control col-sm-2">
-        <option value="-1" selected>Select</option>
+        <option value="-1" selected>Select</option> 
         <option value="0">Rock</option>
         <option value="1">Paper</option>
         <option value="2">Scissors</option>
@@ -59,11 +63,11 @@
     <pre>
 <?php
       
-      if($human == -1) {
+      if($human == -1) { // If none of the options are selected
         print "Please select a strategy and press Play.\n";
       }
 
-      else if($human == 3) {
+      else if($human == 3) { // If user wishes to TEST all combinations
         for($c = 0 ; $c < 3 ; $c++) {
           for($h = 0 ; $h < 3 ; $h++) {
             $r = check($c, $h);

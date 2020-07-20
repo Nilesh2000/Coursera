@@ -19,7 +19,8 @@
       *           *
   </pre>
   <p>
-    The SHA256 Hash of "Nilesh D" is <?php echo hash('sha256', 'Nilesh D'); ?>
+    <!-- Print SHA256 hash of one's name -->
+    The SHA256 Hash of "Nilesh D" is <?= hash('sha256', 'Nilesh D'); ?>
   </p>
 </body>
 </html>

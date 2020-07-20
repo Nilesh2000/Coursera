@@ -1,23 +1,24 @@
 <?php 
 
-$error = false;
+  $error = false;
 
-$salt = 'XyZzy12*_';
-$stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
+  $salt = 'XyZzy12*_';
+  $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
 
-if(isset($_POST['who']) && isset($_POST['pass'])) {
-  if(strlen($_POST['who']) < 1 || strlen($_POST['pass']) < 1) {
-    $error = "User name and password are required";
-  } else {    
-    $password = $_POST['pass'];
-    $md5 = hash('md5', $salt.$password);
-    if($md5 == $stored_hash) {
-      header("Location: game.php?name=".urlencode($_POST['who']));
-    } else {
-      $error = "Incorrect password";
+  if(isset($_POST['who']) && isset($_POST['pass'])) {
+    if(strlen($_POST['who']) < 1 || strlen($_POST['pass']) < 1) {
+      $error = "User name and password are required";
+    } else {    
+      $password = $_POST['pass'];
+      $md5 = hash('md5', $salt.$password);
+      if($md5 == $stored_hash) {
+        header("Location: game.php?name=".urlencode($_POST['who']));
+      } else {
+        $error = "Incorrect password";
+      }
     }
   }
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -35,10 +36,11 @@ if(isset($_POST['who']) && isset($_POST['pass'])) {
   <h1>Please Log In</h1>
 
   <?php 
-  if($error !== false) // Note the use of triple equals and not double equals
-    {
+
+  if($error !== false) { // Note the use of triple equals and not double equals
       echo('<p style="color: red;" class="col-sm-10 col-sm-offset-2">'.$error."</p>\n");
     }
+    
   ?>
 
     <form method="POST">

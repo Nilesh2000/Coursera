@@ -16,21 +16,24 @@
 
       $status = "Not found";
 
+      // Check if user has given input
       if(isset($_GET['md5'])) {
+        // Start timer
         $start_time = microtime(true);
         $md5 = $_GET['md5'];
 
         $show = 15; // To print first 15 computations
 
         // Possible first two characters in our pre-hashed pin
-        for($iter = 0 ; $iter < 100 ; $iter++) {
-          $ch1 = $iter; // The first of the two characters
+        for($i = 0 ; $i < 100 ; $i++) {
+          $ch1 = $i; // The first two characters
           if($ch1 < 10) {
             $ch1 = "0".$ch1;
           }
           // Inner Loop
+          // Last two characters in the pre-hashed in
           for($j = 0 ; $j < 100 ; $j++) {
-            $ch2 = $j;
+            $ch2 = $j; // The last two characters
             if($ch2 < 10) {
               $ch2 = "0".$ch2;
             }

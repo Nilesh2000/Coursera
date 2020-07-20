@@ -1,44 +1,46 @@
 <?php 
 
-// If the cancel button is clicked
-if(isset($_POST['logout'])) {
-  header('Location: index.php');
-  return;
-}
-
-$salt = 'XyZzy12*_';
-$stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
-
-$error = false; // If POST data is incorrectly formatted
-
-if(isset($_POST['who']) && isset($_POST['pass'])) {
-
-  if(strlen($_POST['who']) < 1 || strlen($_POST['pass']) < 1) {
-  $error = "User name and password are required";
+  // If the cancel button is clicked
+  if(isset($_POST['logout'])) {
+    header('Location: index.php');
+    return;
   }
 
-  else {
-    $email = $_POST['who'];
-    $password = $_POST['pass'];
+  $salt = 'XyZzy12*_';
+  $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
 
-    if(strpos($email, '@') === false) {
-      $error = "Email must have an at-sign (@)";
+  $error = false; // If POST data is incorrectly formatted
+
+  if(isset($_POST['who']) && isset($_POST['pass'])) {
+
+    if(strlen($_POST['who']) < 1 || strlen($_POST['pass']) < 1) {
+    $error = "User name and password are required";
     }
 
     else {
-      $check = hash('md5', $salt.$password);
-      if($check == $stored_hash) {
-        error_log("Login success : ".$email);
-        header("Location: autos.php?name=".urlencode($email));
-        return;
-      }
+      $email = $_POST['who'];
+      $password = $_POST['pass'];
+
+      if(strpos($email, '@') === false) {
+        $error = "Email must have an at-sign (@)";
+      } 
+      
       else {
-        $error = "Incorrect password";
-        error_log("Login fail : ".$email."$check");
+        $check = hash('md5', $salt.$password);
+        
+        if($check == $stored_hash) {
+          error_log("Login success : ".$email);
+          header("Location: autos.php?name=".urlencode($email));
+          return;
+        } 
+
+        else {
+          $error = "Incorrect password";
+          error_log("Login fail : ".$email."$check");
+        }
       }
     }
   }
-}
 
 ?>
 

@@ -1,30 +1,29 @@
 <?php 
 
-session_start();
+  session_start();
 
-$logged_in = false;
-$autos = array();
+  $logged_in = false;
+  $autos = array();
 
-if(isset($_SESSION['name'])) {
-  $logged_in = true;
-  $status = false;
+  if(isset($_SESSION['name'])) {
+    $logged_in = true;
+    $status = false;
 
-  if(isset($_SESSION['status'])) {
-    $status = htmlentities($_SESSION['status']);
-    $status_colour = htmlentities($_SESSION['color']);
+    if(isset($_SESSION['status'])) {
+      $status = htmlentities($_SESSION['status']);
+      $status_colour = htmlentities($_SESSION['color']);
 
-    unset($_SESSION['status']);
-    unset($_SESSION['color']);
+      unset($_SESSION['status']);
+      unset($_SESSION['color']);
+    }
+
+    require_once 'pdo.php';
+
+    $stmt = $pdo->query("SELECT * FROM db");
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $autos[] = $row;
+    }
   }
-
-  require_once 'pdo.php';
-
-  $stmt = $pdo->query("SELECT * FROM db");
-
-  while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $autos[] = $row;
-  }
-}
 
 ?>
 
@@ -56,11 +55,9 @@ if(isset($_SESSION['name'])) {
       <?php else : ?>
 
         <?php 
-          
           if($status != false) {
             echo('<p style="color: '.$status_colour.';" class="col-sm-10 col-sm-offset-2">'.htmlentities($status)."</p>\n");
           }
-
         ?>
 
         <?php if(empty($autos)) : ?>

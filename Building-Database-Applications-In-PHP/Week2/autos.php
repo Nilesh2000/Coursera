@@ -1,57 +1,55 @@
 <?php
 
-// Check for a GET parameter
-if(!isset($_GET['name']) || strlen($_GET['name']) < 1) {
-  die("Name paramter missing.");
-}
-
-if(strpos($_GET['name'], '@') === false ) {
-    die('Name parameter is wrong');
-}
-
-// If user wishes to logout
-if(isset($_POST['logout'])) {
-  header('Location: index.php');
-  return;
-}
-
-require_once 'pdo.php';
-
-$name = htmlentities($_GET['name']);
-
-$status = false;
-$status_colour = "red";
-
-if(isset($_POST['make']) && isset($_POST['year']) && isset($_POST['mileage'])) {
-
-  if(strlen($_POST['make']) < 1) {
-    $status = "Make is required";
+  // Check for a GET parameter
+  if(!isset($_GET['name']) || strlen($_GET['name']) < 1) {
+    die("Name paramter missing.");
   }
 
-  else if(!is_numeric($_POST['mileage']) || !is_numeric($_POST['year'])) {
-    $status = "Mileage and year must be numeric";
+  if(strpos($_GET['name'], '@') === false ) {
+      die('Name parameter is wrong');
   }
 
-  else {
-    $make = htmlentities($_POST['make']);
-    $year = htmlentities($_POST['year']);
-    $mileage = htmlentities($_POST['mileage']);
+  // If user wishes to logout
+  if(isset($_POST['logout'])) {
+    header('Location: index.php');
+    return;
+  }
 
-    $sql = "INSERT INTO db(make, year, mileage)
-            VALUES(:make, :year, :mileage)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-      ':make' => $make,
-      ':year' => $year,
-      ':mileage' => $mileage,
-    ]);
+  require_once 'pdo.php';
+
+  $name = htmlentities($_GET['name']);
+
+  $status = false;
+  $status_colour = "red";
+
+  if(isset($_POST['make']) && isset($_POST['year']) && isset($_POST['mileage'])) {
+
+    if(strlen($_POST['make']) < 1) {
+      $status = "Make is required";
+    } 
     
-    $status = 'Record inserted';
-    $status_colour = 'green';
-
+    else if(!is_numeric($_POST['mileage']) || !is_numeric($_POST['year'])) {
+      $status = "Mileage and year must be numeric";
+    }
     
+    else {
+      $make = htmlentities($_POST['make']);
+      $year = htmlentities($_POST['year']);
+      $mileage = htmlentities($_POST['mileage']);
+
+      $sql = "INSERT INTO db(make, year, mileage)
+              VALUES(:make, :year, :mileage)";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute([
+        ':make' => $make,
+        ':year' => $year,
+        ':mileage' => $mileage,
+      ]);
+      
+      $status = 'Record inserted';
+      $status_colour = 'green';
+    }
   }
-}
 
   $autos = array();
   $stmt = $pdo->query("SELECT * FROM db");

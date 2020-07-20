@@ -1,34 +1,34 @@
 <?php 
 
-session_start();
+  session_start();
 
-if(!isset($_SESSION['name'])) {
-  die("ACCESS ERROR");
-}
+  if(!isset($_SESSION['name'])) {
+    die("ACCESS ERROR");
+  }
 
-require_once 'pdo.php';
+  require_once 'pdo.php';
 
-if(isset($_GET['autos_id'])) {
-  $auto_id = htmlentities($_GET['autos_id']);
+  if(isset($_GET['autos_id'])) {
+    $auto_id = htmlentities($_GET['autos_id']);
 
-  if(isset($_POST['delete'])) {
-    $sql = "DELETE FROM db WHERE auto_id=:auto_id";
+    if(isset($_POST['delete'])) {
+      $sql = "DELETE FROM db WHERE auto_id=:auto_id";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute([':auto_id' => $auto_id]);
+
+      $_SESSION['status'] = "Record deleted";
+      $_SESSION['color'] = "green";
+
+      header("Location: index.php");
+      return;
+    }
+
+    $sql = "SELECT make FROM db WHERE auto_id=:auto_id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':auto_id' => $auto_id]);
 
-    $_SESSION['status'] = "Record deleted";
-    $_SESSION['color'] = "green";
-
-    header("Location: index.php");
-    return;
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
   }
-
-  $sql = "SELECT make FROM db WHERE auto_id=:auto_id";
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute([':auto_id' => $auto_id]);
-
-  $row = $stmt->fetch(PDO::FETCH_ASSOC);
-}
 
 ?>
 

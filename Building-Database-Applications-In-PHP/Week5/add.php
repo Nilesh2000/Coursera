@@ -1,73 +1,72 @@
 <?php 
 
-session_start();
+  session_start();
 
-if(!isset($_SESSION['name'])) {
-  die("ACCESS DENIED");
-}
+  if(!isset($_SESSION['name'])) {
+    die("ACCESS DENIED");
+  }
 
-if(isset($_POST['cancel'])) {
-  header("Location: index.php");
-  return;
-}
-
-$status = false;
-
-if(isset($_SESSION['status'])) {
-  $status = htmlentities($_SESSION['status']);
-  $status_colour = htmlentities($_SESSION['color']);
-
-  unset($_SESSION['status']);
-  unset($_SESSION['color']);
-}
-
-require_once 'pdo.php';
-
-$name = htmlentities($_SESSION['name']);
-
-$_SESSION['color'] = 'red';
-
-if(isset($_POST['make']) && isset($_POST['model']) && isset($_POST['year']) && isset($_POST['mileage'])) {
-  
-  if(strlen($_POST['make']) < 1 || strlen($_POST['model']) < 1 || strlen($_POST['year']) < 1 || strlen($_POST['mileage']) < 1) {
-    $_SESSION['status'] = "All fields are required";
-    header("Location: add.php");
+  if(isset($_POST['cancel'])) {
+    header("Location: index.php");
     return;
   }
 
-  if(!is_numeric($_POST['year'])) {
-      $_SESSION['status'] = "Year must be an integer";
+  $status = false;
+
+  if(isset($_SESSION['status'])) {
+    $status = htmlentities($_SESSION['status']);
+    $status_colour = htmlentities($_SESSION['color']);
+
+    unset($_SESSION['status']);
+    unset($_SESSION['color']);
+  }
+
+  require_once 'pdo.php';
+
+  $name = htmlentities($_SESSION['name']);
+
+  $_SESSION['color'] = 'red';
+
+  if(isset($_POST['make']) && isset($_POST['model']) && isset($_POST['year']) && isset($_POST['mileage'])) {
+    
+    if(strlen($_POST['make']) < 1 || strlen($_POST['model']) < 1 || strlen($_POST['year']) < 1 || strlen($_POST['mileage']) < 1) {
+      $_SESSION['status'] = "All fields are required";
       header("Location: add.php");
       return;
+    }
+
+    if(!is_numeric($_POST['year'])) {
+        $_SESSION['status'] = "Year must be an integer";
+        header("Location: add.php");
+        return;
+    }
+
+    if(!is_numeric($_POST['mileage'])) {
+        $_SESSION['status'] = "Mileage must be an integer";
+        header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
+        return;
+    }
+
+    $make = htmlentities($_POST['make']);
+    $model = htmlentities($_POST['model']);
+    $year = htmlentities($_POST['year']);
+    $mileage = htmlentities($_POST['mileage']);
+
+    $sql = "INSERT INTO db VALUES(AUTO_ID, :make, :model, :year, :mileage)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+                    ':make' => $make,
+                    ':model' => $model,
+                    ':year' => $year,
+                    ':mileage' => $mileage,
+                    ]);
+                    
+    $_SESSION['status'] = "Record added";
+    $_SESSION['color'] = "green";
+
+    header("Location: index.php");
+    return;
   }
-
-  if(!is_numeric($_POST['mileage'])) {
-      $_SESSION['status'] = "Mileage must be an integer";
-      header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
-      return;
-  }
-
-  $make = htmlentities($_POST['make']);
-  $model = htmlentities($_POST['model']);
-  $year = htmlentities($_POST['year']);
-  $mileage = htmlentities($_POST['mileage']);
-
-  
-  $sql = "INSERT INTO db VALUES(AUTO_ID, :make, :model, :year, :mileage)";
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute([
-                  ':make' => $make,
-                  ':model' => $model,
-                  ':year' => $year,
-                  ':mileage' => $mileage,
-                  ]);
-                  
-  $_SESSION['status'] = "Record added";
-  $_SESSION['color'] = "green";
-
-  header("Location: index.php");
-  return;
-}
 
 ?>
 

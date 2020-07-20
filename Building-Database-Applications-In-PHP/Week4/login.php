@@ -1,53 +1,55 @@
 <?php 
 
-session_start();
+  session_start();
 
-// If the cancel button is clicked
-if(isset($_POST['logout'])) {
-  header('Location: index.php');
-  return;
-}
-
-$salt = 'XyZzy12*_';
-$stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
-
-$error = false; // If POST data is incorrectly formatted
-
-if(isset($_POST['email']) && isset($_POST['pass'])) {
-
-  if(strlen($_POST['email']) < 1 || strlen($_POST['pass']) < 1) {
-  $_SESSION['error'] = "User name and password are required";
-  header("Location: login.php");
-  return;
+  // If the cancel button is clicked
+  if(isset($_POST['logout'])) {
+    header('Location: index.php');
+    return;
   }
 
-  else {
-    $email = $_POST['email'];
-    $password = $_POST['pass'];
+  $salt = 'XyZzy12*_';
+  $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
 
-    if(strpos($email, '@') === false) {
-      $_SESSION['error'] = "Email must have an at-sign (@)";
-      header("Location: login.php");
-      return;
+  $error = false; // If POST data is incorrectly formatted
+
+  if(isset($_POST['email']) && isset($_POST['pass'])) {
+
+    if(strlen($_POST['email']) < 1 || strlen($_POST['pass']) < 1) {
+    $_SESSION['error'] = "User name and password are required";
+    header("Location: login.php");
+    return;
     }
 
     else {
-      $check = hash('md5', $salt.$password);
-      if($check == $stored_hash) {
-        error_log("Login success : ".$email);
-        $_SESSION['name'] = $_POST['email'];    
-        header("Location: view.php");
-        return;   
-      }
-      else {
-        $_SESSION['error'] = "Incorrect password";
-        error_log("Login fail : ".$email."$check");
+      $email = $_POST['email'];
+      $password = $_POST['pass'];
+
+      if(strpos($email, '@') === false) {
+        $_SESSION['error'] = "Email must have an at-sign (@)";
         header("Location: login.php");
         return;
       }
+
+      else {
+        $check = hash('md5', $salt.$password);
+
+        if($check == $stored_hash) {
+          error_log("Login success : ".$email);
+          $_SESSION['name'] = $_POST['email'];    
+          header("Location: view.php");
+          return;   
+        }
+        
+        else {
+          $_SESSION['error'] = "Incorrect password";
+          error_log("Login fail : ".$email."$check");
+          header("Location: login.php");
+          return;
+        }
+      }
     }
   }
-}
 
 ?>
 

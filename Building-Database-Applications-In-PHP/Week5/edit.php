@@ -1,85 +1,85 @@
 <?php 
 
-session_start();
+  session_start();
 
-if(!isset($_SESSION['name'])) {
-  die("ACCESS ERROR");
-}
+  if(!isset($_SESSION['name'])) {
+    die("ACCESS ERROR");
+  }
 
-if(isset($_POST['cancel'])) {
-  header("Location: index.php");
-  return;
-}
-
-$status = false;
-
-if(isset($_SESSION['status'])) {
-  $status = htmlentities($_SESSION['status']);
-  $status_colour = htmlentities($_SESSION['color']);
-
-  unset($_SESSION['status']);
-  unset($_SESSION['color']);
-}
-
-require_once 'pdo.php';
-
-$name = htmlentities($_SESSION['name']);
-
-$_SESSION['color'] = 'red';
-
-if(isset($_GET['autos_id'])) {
-  
-  if(isset($_POST['make']) && isset($_POST['model']) && isset($_POST['year']) && isset($_POST['mileage'])) {
-    
-    if(strlen($_POST['make']) < 1 || strlen($_POST['model']) < 1 || strlen($_POST['year']) < 1 || strlen($_POST['mileage']) < 1) {
-      $_SESSION['status'] = "All fields are required";
-      header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
-      return;
-    }
-    
-    if(!is_numeric($_POST['year'])) {
-      $_SESSION['status'] = "Year must be an integer";
-      header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
-      return;
-    }
-    
-    if(!is_numeric($_POST['mileage'])) {
-      $_SESSION['status'] = "Mileage must be an integer";
-      header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
-      return;
-    }
-    
-    $make = htmlentities($_POST['make']);
-    $model = htmlentities($_POST['model']);
-    $year = htmlentities($_POST['year']);
-    $mileage = htmlentities($_POST['mileage']);
-
-    $auto_id = htmlentities($_GET['autos_id']);
-
-    $sql = "UPDATE db SET make=:make, model=:model, year=:year, mileage=:mileage WHERE auto_id=:auto_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-                    ':make' => $make,
-                    ':model' => $model,
-                    ':year' => $year,
-                    ':mileage' => $mileage,
-                    ':auto_id' => $auto_id,
-                    ]);
-    $_SESSION['status'] = "Record edited";
-    $_SESSION['color'] = "green";
-
+  if(isset($_POST['cancel'])) {
     header("Location: index.php");
     return;
   }
 
-  $auto_id = htmlentities($_GET['autos_id']);
+  $status = false;
 
-  $sql = "SELECT * FROM db WHERE auto_id=:auto_id";
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute(['auto_id' => $auto_id]);
+  if(isset($_SESSION['status'])) {
+    $status = htmlentities($_SESSION['status']);
+    $status_colour = htmlentities($_SESSION['color']);
 
-  $result = $stmt->fetch(PDO::FETCH_ASSOC);
-}
+    unset($_SESSION['status']);
+    unset($_SESSION['color']);
+  }
+
+  require_once 'pdo.php';
+
+  $name = htmlentities($_SESSION['name']);
+
+  $_SESSION['color'] = 'red';
+
+  if(isset($_GET['autos_id'])) {
+    
+    if(isset($_POST['make']) && isset($_POST['model']) && isset($_POST['year']) && isset($_POST['mileage'])) {
+      
+      if(strlen($_POST['make']) < 1 || strlen($_POST['model']) < 1 || strlen($_POST['year']) < 1 || strlen($_POST['mileage']) < 1) {
+        $_SESSION['status'] = "All fields are required";
+        header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
+        return;
+      }
+      
+      if(!is_numeric($_POST['year'])) {
+        $_SESSION['status'] = "Year must be an integer";
+        header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
+        return;
+      }
+      
+      if(!is_numeric($_POST['mileage'])) {
+        $_SESSION['status'] = "Mileage must be an integer";
+        header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
+        return;
+      }
+      
+      $make = htmlentities($_POST['make']);
+      $model = htmlentities($_POST['model']);
+      $year = htmlentities($_POST['year']);
+      $mileage = htmlentities($_POST['mileage']);
+
+      $auto_id = htmlentities($_GET['autos_id']);
+
+      $sql = "UPDATE db SET make=:make, model=:model, year=:year, mileage=:mileage WHERE auto_id=:auto_id";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute([
+                      ':make' => $make,
+                      ':model' => $model,
+                      ':year' => $year,
+                      ':mileage' => $mileage,
+                      ':auto_id' => $auto_id,
+                      ]);
+      $_SESSION['status'] = "Record edited";
+      $_SESSION['color'] = "green";
+
+      header("Location: index.php");
+      return;
+    }
+
+    $auto_id = htmlentities($_GET['autos_id']);
+
+    $sql = "SELECT * FROM db WHERE auto_id=:auto_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['auto_id' => $auto_id]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  }
 
 ?>
 
@@ -98,11 +98,9 @@ if(isset($_GET['autos_id'])) {
     <h1>Editing Automobile</h1>
 
     <?php 
-
       if($status != false) {
         echo('<p style="color: '.$status_colour.';" class="col-sm-10 col-sm-offset-2">'.htmlentities($status)."</p>\n");
       }
-
     ?>
 
     <form method="POST">

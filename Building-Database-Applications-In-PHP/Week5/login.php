@@ -1,48 +1,49 @@
 <?php
 
-session_start();
+  session_start();
 
-if(isset($_POST['logout'])) {
-  header("Location: index.php");
-  return;
-}
-
-$salt = 'XyZzy12*_';
-$stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
-
-$error = false;
-
-if(isset($_SESSION['error'])) {
-  $error = htmlentities($_SESSION['error']);
-  unset($_SESSION['error']);
-}
-
-if(isset($_POST['email']) && isset($_POST['pass'])) {
-  if(strlen($_POST['email']) < 1 || strlen($_POST['pass']) < 1) {
-    $_SESSION['error'] = "User name and password are required";
-    header("Location: login.php");
+  if(isset($_POST['logout'])) {
+    header("Location: index.php");
     return;
   }
 
-  $email = htmlentities($_POST['email']);
-  $pass = htmlentities($_POST['pass']);
+  $salt = 'XyZzy12*_';
+  $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
 
-  $check = hash("md5", $salt.$pass);
+  $error = false;
 
-  if($check != $stored_hash) {
-    error_log("Login Failure".$pass."$check");
-    $_SESSION['error'] = "Incorrect password";
+  if(isset($_SESSION['error'])) {
+    $error = htmlentities($_SESSION['error']);
+    unset($_SESSION['error']);
+  }
 
-    header("Location: login.php");
+  if(isset($_POST['email']) && isset($_POST['pass'])) {
+   
+    if(strlen($_POST['email']) < 1 || strlen($_POST['pass']) < 1) {
+      $_SESSION['error'] = "User name and password are required";
+      header("Location: login.php");
+      return;
+    }
+
+    $email = htmlentities($_POST['email']);
+    $pass = htmlentities($_POST['pass']);
+
+    $check = hash("md5", $salt.$pass);
+
+    if($check != $stored_hash) {
+      error_log("Login Failure".$pass."$check");
+      $_SESSION['error'] = "Incorrect password";
+
+      header("Location: login.php");
+      return;
+    }
+    
+    error_log("Login success ".$email);
+    $_SESSION['name'] = $email;
+
+    header("Location: index.php");
     return;
   }
-  
-  error_log("Login success ".$email);
-  $_SESSION['name'] = $email;
-
-  header("Location: index.php");
-  return;
-}
 
 ?>
 

@@ -1,51 +1,51 @@
 <?php 
 
-session_start();
+  session_start();
 
-if(!isset($_SESSION['name'])) {
-  die("Not logged in");
-}
-
-if(isset($_POST['cancel'])) {
-  header("Location: view.php");
-  return;
-}
-
-require_once 'pdo.php';
-
-if(isset($_POST['make']) && isset($_POST['year']) && isset($_POST['mileage'])) {
-
-  if(strlen($_POST['make']) < 1) {
-    $_SESSION['error'] = "Make is required";
-    header("Location: add.php");
-    return;
+  if(!isset($_SESSION['name'])) {
+    die("Not logged in");
   }
 
-  else if(!is_numeric($_POST['mileage']) || !is_numeric($_POST['year'])) {
-    $_SESSION['error'] = "Mileage and year must be numeric";
-    header("Location: add.php");
-    return;
-  }
-
-  else {
-    $make = htmlentities($_POST['make']);
-    $year = htmlentities($_POST['year']);
-    $mileage = htmlentities($_POST['mileage']);
-
-    $sql = "INSERT INTO db(make, year, mileage)
-            VALUES(:make, :year, :mileage)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-      ':make' => $make,
-      ':year' => $year,
-      ':mileage' => $mileage,
-    ]);
-
-    $_SESSION['success'] = "Record inserted";
+  if(isset($_POST['cancel'])) {
     header("Location: view.php");
     return;
   }
-}
+
+  require_once 'pdo.php';
+
+  if(isset($_POST['make']) && isset($_POST['year']) && isset($_POST['mileage'])) {
+
+    if(strlen($_POST['make']) < 1) {
+      $_SESSION['error'] = "Make is required";
+      header("Location: add.php");
+      return;
+    }
+
+    else if(!is_numeric($_POST['mileage']) || !is_numeric($_POST['year'])) {
+      $_SESSION['error'] = "Mileage and year must be numeric";
+      header("Location: add.php");
+      return;
+    }
+
+    else {
+      $make = htmlentities($_POST['make']);
+      $year = htmlentities($_POST['year']);
+      $mileage = htmlentities($_POST['mileage']);
+
+      $sql = "INSERT INTO db(make, year, mileage)
+              VALUES(:make, :year, :mileage)";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute([
+        ':make' => $make,
+        ':year' => $year,
+        ':mileage' => $mileage,
+      ]);
+
+      $_SESSION['success'] = "Record inserted";
+      header("Location: view.php");
+      return;
+    }
+  }
 
 ?>
 

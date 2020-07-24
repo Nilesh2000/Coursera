@@ -6,19 +6,19 @@
     return;
   }
 
-  $salt = 'XyZzy12*_';
+  $salt        = 'XyZzy12*_';
   $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
 
   $error = false; // If POST data is incorrectly formatted
 
-  if(isset($_POST['who']) && isset($_POST['pass'])) {
+  if( isset($_POST['who']) && isset($_POST['pass']) ) {
 
-    if(strlen($_POST['who']) < 1 || strlen($_POST['pass']) < 1) {
+    if( strlen($_POST['who']) == 0 || strlen($_POST['pass']) == 0 ) {
     $error = "User name and password are required";
     }
 
     else {
-      $email = $_POST['who'];
+      $email    = $_POST['who'];
       $password = $_POST['pass'];
 
       if(strpos($email, '@') === false) {
@@ -46,6 +46,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,23 +55,23 @@
 
   <title>Nilesh D</title>
 </head>
+
 <body>
   <div class="container">
     <h1>Please Log In</h1>
 
     <?php 
-    if($error !== false) // Note the use of triple equals and not double equals
-    {
-      echo('<p style="color: red;" class="col-sm-10 col-sm-offset-2">'.$error."</p>\n");
-    }
+      if($error !== false) {// Note the use of triple equals and not double equals
+        echo('<p style="color: red;" class="col-sm-10 col-sm-offset-2">'.$error."</p>\n");
+      }
     ?>
   
     <form method="POST">
 
       <label for="email">E-Mail ID:</label>
-      <input type="text" class="col-sm-3 form-control" name="who" id="email" placeholder="Enter E-Mail">
+      <input type="text" class="col-sm-3 form-control" name="who">
       <label for="password">Password:</label>
-      <input type="text" class="col-sm-3 form-control" name="pass" id="password" placeholder="Enter Password">
+      <input type="text" class="col-sm-3 form-control" name="pass">
 
       <div class="form-group">
         <input type="submit" value="Log In" class="mt-2 btn btn-primary">
@@ -78,6 +79,7 @@
       </div>
 
     </form>
+    
     <p>
       For a password hint, view source and find a password in the HTML comments.
       <!-- Hint: The password is name of the language followed by 123 -->

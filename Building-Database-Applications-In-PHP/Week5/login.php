@@ -2,31 +2,31 @@
 
   session_start();
 
-  if(isset($_POST['logout'])) {
+  if( isset($_POST['logout']) ) {
     header("Location: index.php");
     return;
   }
 
-  $salt = 'XyZzy12*_';
+  $salt        = 'XyZzy12*_';
   $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
 
   $error = false;
 
-  if(isset($_SESSION['error'])) {
+  if( isset($_SESSION['error']) ) {
     $error = htmlentities($_SESSION['error']);
     unset($_SESSION['error']);
   }
 
-  if(isset($_POST['email']) && isset($_POST['pass'])) {
+  if( isset($_POST['email']) && isset($_POST['pass']) ) {
    
-    if(strlen($_POST['email']) < 1 || strlen($_POST['pass']) < 1) {
+    if( strlen($_POST['email']) == 0 || strlen($_POST['pass']) == 0 ) {
       $_SESSION['error'] = "User name and password are required";
       header("Location: login.php");
       return;
     }
 
     $email = htmlentities($_POST['email']);
-    $pass = htmlentities($_POST['pass']);
+    $pass  = htmlentities($_POST['pass']);
 
     $check = hash("md5", $salt.$pass);
 
@@ -49,6 +49,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,17 +57,18 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <title>Nilesh D</title>
+
 </head>
+
 <body>
+
   <div class="container">
     <h1>Please Log In</h1>
 
     <?php 
-
       if($error !== false) {
         echo('<p style="color: red;" class="col-sm-10 col-sm-offset-2">'.htmlentities($error)."</p>\n");
       }
-
     ?>
 
     <form method="POST">
@@ -86,5 +88,6 @@
     </p>
 
   </div>
+  
 </body>
 </html>

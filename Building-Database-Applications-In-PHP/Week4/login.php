@@ -8,24 +8,24 @@
     return;
   }
 
-  $salt = 'XyZzy12*_';
+  $salt        = 'XyZzy12*_';
   $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
 
   $error = false; // If POST data is incorrectly formatted
 
-  if(isset($_POST['email']) && isset($_POST['pass'])) {
+  if( isset($_POST['email']) && isset($_POST['pass']) ) {
 
-    if(strlen($_POST['email']) < 1 || strlen($_POST['pass']) < 1) {
+    if( strlen($_POST['email']) == 0 || strlen($_POST['pass']) == 0 ) {
     $_SESSION['error'] = "User name and password are required";
     header("Location: login.php");
     return;
     }
 
     else {
-      $email = $_POST['email'];
+      $email    = $_POST['email'];
       $password = $_POST['pass'];
 
-      if(strpos($email, '@') === false) {
+      if( strpos($email, '@') === false ) {
         $_SESSION['error'] = "Email must have an at-sign (@)";
         header("Location: login.php");
         return;
@@ -55,6 +55,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,16 +64,16 @@
 
   <title>Nilesh D</title>
 </head>
+
 <body>
   <div class="container">
     <h1>Please Log In</h1>
 
     <?php 
-    if(isset($_SESSION['error'])) // Note the use of triple equals and not double equals
-    {
-      echo('<p style="color: red;" class="col-sm-10 col-sm-offset-2">'.htmlentities($_SESSION['error'])."</p>\n");
-      unset($_SESSION['error']);
-    }
+      if(isset($_SESSION['error'])) { // Note the use of triple equals and not double equals
+        echo('<p style="color: red;" class="col-sm-10 col-sm-offset-2">'.htmlentities($_SESSION['error'])."</p>\n");
+        unset($_SESSION['error']);
+      }
     ?>
   
     <form method="POST">
@@ -88,6 +89,7 @@
       </div>
 
     </form>
+
     <p>
       For a password hint, view source and find a password in the HTML comments.
       <!-- Hint: The password is name of the language followed by 123 -->

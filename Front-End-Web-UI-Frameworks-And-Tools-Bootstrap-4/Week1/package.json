@@ -4,6 +4,8 @@
   "description": "Week 1 coursework",
   "main": "index.html",
   "scripts": {
+    "start": "npm run lite",
+    "lite": "lite-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nilesh D",

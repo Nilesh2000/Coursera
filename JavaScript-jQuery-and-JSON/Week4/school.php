@@ -2,7 +2,7 @@
 
   session_start();
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
 
   if( !isset($_SESSION['user_id']) ) {
     die("ACCESS DENIED");
@@ -15,7 +15,7 @@
     $stmt->execute([':prefix' => $_GET['term']."%"]);
     $schools = array();
     // Do not use fetchAll here. Don't ask me why. It just doesn't work.
-    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    while($row = $stmt->fetch()) {
       $schools[] = $row['name'];
     }
     echo json_encode($schools, JSON_PRETTY_PRINT);

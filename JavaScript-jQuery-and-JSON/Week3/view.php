@@ -1,6 +1,6 @@
 <?php 
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
   
   session_start();
 
@@ -16,16 +16,13 @@
   $sql = "SELECT * FROM profile WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
-  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $row = $stmt->fetch();
 
-  $sql = "SELECT * FROM position WHERE profile_id=:pid";
+  $sql  = "SELECT * FROM position WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $positions = array();
-
-  while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $positions[] = $result;
-  }
+  $positions = $stmt->fetchAll();
 
   if($row == false) {
     $_SESSION['status'] = "Could not load profile";

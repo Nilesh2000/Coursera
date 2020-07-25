@@ -2,7 +2,7 @@
 
   session_start();
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
 
   if( !isset($_SESSION['user_id']) ) {
     die("ACCESS DENIED");
@@ -110,7 +110,7 @@
       $sql  = "SELECT * FROM institution WHERE name = :edu_school LIMIT 1";
       $stmt = $pdo->prepare($sql);
       $stmt->execute([':edu_school' => $edu_school]);
-      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      $result = $stmt->fetch();
 
       if($result) {
         // Get the institution ID of the last inserted institution
@@ -150,26 +150,20 @@
   $sql     = "SELECT * FROM profile WHERE profile_id=:pid";
   $stmt    = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
-  $profile = $stmt->fetch(PDO::FETCH_ASSOC);
+  $profile = $stmt->fetch();
 
   $sql  = "SELECT * FROM education LEFT JOIN institution ON education.institution_id = institution.institution_id WHERE profile_id=:pid ORDER BY rank";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $schools = array();
+  $schools = $stmt->fetchAll();
   
-  while($school = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $schools[] = $school;
-  }
-
   $sql  = "SELECT * FROM position WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
 
   $position = array();
-
-  while($row = $stmt->fetch(PDO::FETCH_OBJ)) {
-    $position[] = $row;
-  }
+  $position = $stmt->fetchAll();
 
   $numOfPositions = count($position);
   $numOfSchools   = count($schools);
@@ -295,13 +289,13 @@
               <div class="form-group row">
                 <label class="col-form-label col-sm-2">Year:</label>
                 <div class="col-sm-3">
-                  <input type="text" name="year<?= $i; ?>" class="form-control" value="<?= $position[$i-1]->year; ?>">
+                  <input type="text" name="year<?= $i; ?>" class="form-control" value="<?= $position[$i-1]['year']; ?>">
                 </div>
                 <button class="btn btn-danger" onclick="$('#position<?= $i; ?>').remove();return false;">-</button> 
               </div>
 
               <div class="col-sm-6 p-0">
-                <textarea name="desc<?= $i; ?>" rows="8" class="form-control"><?= $position[$i-1]->description; ?></textarea>
+                <textarea name="desc<?= $i; ?>" rows="8" class="form-control"><?= $position[$i-1]['description']; ?></textarea>
               </div>
 
             </div>

@@ -2,7 +2,7 @@
 
   session_start();
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
 
   if( !isset($_GET['profile_id']) ) {
     $_SESSION['status'] = "Missing profile_id";
@@ -14,7 +14,7 @@
   $sql = "SELECT * FROM profile WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $_GET['profile_id']]);
-  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $row = $stmt->fetch();
 
   if($row == false) {
     $_SESSION['status'] = "Could not load profile";

@@ -2,7 +2,7 @@
 
   session_start();
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
 
   if(!isset($_GET['profile_id'])) {
     $_SESSION['status'] = "Missing profile_id";
@@ -16,25 +16,19 @@
   $sql  = "SELECT * FROM profile WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
-  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $row = $stmt->fetch();
 
   $sql  = "SELECT * FROM education LEFT JOIN institution ON education.institution_id = institution.institution_id WHERE profile_id=:pid ORDER BY rank";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $schools = array();
+  $schools = $stmt->fetchAll();
   
-  while($school = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $schools[] = $school;
-  }
-
   $sql  = "SELECT * FROM position WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $positions = array();
-
-  while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $positions[] = $result;
-  }
+  $positions = $stmt->fetchAll();
 
   if($row == false) {
     $_SESSION['status'] = "Could not load profile";

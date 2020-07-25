@@ -2,7 +2,7 @@
 
   session_start();
   
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
 
   if(!isset($_SESSION['user_id'])) {
     die("ACCESS DENIED");
@@ -38,7 +38,7 @@
   $sql = "SELECT first_name, last_name FROM profile WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
-  $profile = $stmt->fetch(PDO::FETCH_ASSOC);
+  $profile = $stmt->fetch();
 ?>
 
 <!DOCTYPE html>

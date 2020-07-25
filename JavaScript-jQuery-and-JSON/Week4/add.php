@@ -1,6 +1,6 @@
 <?php 
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
   
   session_start();
 
@@ -103,7 +103,7 @@
       $sql = "SELECT * FROM institution WHERE name = :edu_school LIMIT 1";
       $stmt = $pdo->prepare($sql);
       $stmt->execute([':edu_school' => $edu_school]);
-      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      $result = $stmt->fetch();
 
       if($result) {
         // Get the institution ID of the last inserted institution

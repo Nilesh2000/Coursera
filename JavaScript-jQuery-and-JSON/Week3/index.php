@@ -2,7 +2,7 @@
 
 	session_start();
 	
-	require_once 'pdo.php';
+	require_once 'inc/pdo.php';
 
   $logged_in = false;
   $profiles = array();
@@ -20,11 +20,10 @@
 		}
 	}
 
-	$sql = "SELECT * FROM profile";
-	$stmt = $pdo->query($sql);
-	while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		$profiles[] = $row;
-	}
+	$sql 			= "SELECT * FROM profile";
+	$stmt 		= $pdo->query($sql);
+	$profiles = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>

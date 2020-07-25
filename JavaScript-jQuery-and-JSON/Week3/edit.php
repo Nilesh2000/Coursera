@@ -1,6 +1,6 @@
 <?php 
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
   
   session_start();
 
@@ -102,17 +102,14 @@
   $sql     = "SELECT * FROM profile WHERE profile_id=:pid";
   $stmt    = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
-  $profile = $stmt->fetch(PDO::FETCH_ASSOC);
+  $profile = $stmt->fetch();
 
   $sql  = "SELECT * FROM position WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
 
   $position = array();
-
-  while($row = $stmt->fetch(PDO::FETCH_OBJ)) {
-    $position[] = $row;
-  }
+  $position = $stmt->fetchAll();
 
   $numOfPositions = count($position);
 ?>
@@ -192,13 +189,13 @@
               <div class="form-group row">
                 <label class="col-form-label col-sm-2">Year:</label>
                 <div class="col-sm-3">
-                  <input type="text" name="year<?= $i; ?>" class="form-control" value="<?= $position[$i-1]->year; ?>">
+                  <input type="text" name="year<?= $i; ?>" class="form-control" value="<?= $position[$i-1]['year']; ?>">
                 </div>
                 <button class="btn btn-danger" onclick="$('#position<?= $i; ?>').remove();return false;">-</button> 
               </div>
 
               <div class="col-sm-6 p-0">
-                <textarea name="desc<?= $i; ?>" rows="8" class="form-control"><?= $position[$i-1]->description; ?></textarea>
+                <textarea name="desc<?= $i; ?>" rows="8" class="form-control"><?= $position[$i-1]['description']; ?></textarea>
               </div>
             </div>
             <br>

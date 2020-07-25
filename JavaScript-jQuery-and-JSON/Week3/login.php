@@ -2,7 +2,7 @@
 
   session_start();
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
 
   if(isset($_POST['logout'])) {
     header("Location: logout.php");
@@ -36,7 +36,7 @@
       ':email' => $email, 
       ':password' => $check,
     ]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $row = $stmt->fetch();
     
     if($row != false) {
       $_SESSION['name']    = $row['name'];

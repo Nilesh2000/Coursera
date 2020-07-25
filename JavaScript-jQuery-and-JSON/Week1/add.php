@@ -1,6 +1,6 @@
 <?php 
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
 
   session_start();
 

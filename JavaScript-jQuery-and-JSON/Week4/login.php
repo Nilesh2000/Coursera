@@ -4,23 +4,23 @@
 
   require_once 'pdo.php';
 
-  if(isset($_POST['logout'])) {
+  if( isset($_POST['logout']) ) {
     header("Location: logout.php");
     return;
   }
 
-  $salt = 'XyZzy12*_';
+  $salt        = 'XyZzy12*_';
   $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
 
   $error = false;
 
-  if(isset($_SESSION['error'])) {
+  if( isset($_SESSION['error']) ) {
     $error = htmlentities($_SESSION['error']);
     unset($_SESSION['error']);
   }
 
-  if(isset($_POST['email']) && isset($_POST['pass'])) {
-    if(strlen($_POST['email']) < 1 || strlen($_POST['pass']) < 1) {
+  if( isset($_POST['email']) && isset($_POST['pass']) ) {
+    if( strlen($_POST['email']) == 0 || strlen($_POST['pass']) == 0 ) {
       $_SESSION['error'] = "User name and password are required";
       header("Location: login.php");
       return;
@@ -33,9 +33,9 @@
     $sql   = "SELECT user_id, name FROM users WHERE email = :email and password = :password";
     $stmt  = $pdo->prepare($sql);
     $stmt->execute([
-                    ':email' => $email, 
-                    ':password' => $check,
-                  ]);
+      ':email' => $email, 
+      ':password' => $check,
+    ]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if($row != false) {
@@ -53,6 +53,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,16 +62,17 @@
 
   <title>Nilesh D</title>
 </head>
+
 <body>
   <div class="container">
     <h1>Please Log In</h1>
 
     <?php 
-    if($error != false) {
-      echo "<p style='color: red;' class='col-sm-10 col-sm-offset-2'>$error</p>";
-    }
-
+      if($error != false) {
+        echo "<p style='color: red;' class='col-sm-10 col-sm-offset-2'>$error</p>";
+      }
     ?>
+
     <form method="POST">
         
         <label for="email">Email</label>
@@ -84,6 +86,7 @@
         </div>
 
     </form>
+
     <p>For a password hint, view source and find an account and password in the HTML comments</p>
     <!-- Account : umsi@umich.edu -->
     <!-- Password : php123 -->
@@ -93,16 +96,17 @@
 
   function doValidate() {
     console.log("Validating...");
+
     try {
       addr = document.getElementById('email').value;
       pw = document.getElementById('password').value;
       console.log("Validating addr="+addr+" pw="+pw);
 
-      if(addr == null || addr == "" || pw == null || pw == "") {
+      if( addr == null || addr == "" || pw == null || pw == "" ) {
         alert("Both fields must be filled out");
         return false;
       }
-      if(addr.indexOf('@') == -1) {
+      if( addr.indexOf('@') == -1 ) {
         alert("Invalid email address");
         return false;
       }
@@ -110,6 +114,7 @@
     } catch(e) {
       return false;
     }
+
     return false;
   }
 

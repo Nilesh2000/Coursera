@@ -1,6 +1,7 @@
 <?php 
 
   session_start();
+  
   require_once 'pdo.php';
 
   if(!isset($_SESSION['user_id'])) {
@@ -56,7 +57,7 @@
     <p>First Name: <?= $profile['first_name']; ?></p>
     <p>Last Name: <?= $profile['last_name']; ?></p>
 
-    <form method="post">
+    <form method="POST">
       <input type="hidden" name="profile_id" value=<?= $_GET['profile_id']; ?>>
       <input type="submit" value="Delete" name="delete" class="btn btn-primary">
       <input type="submit" value="Cancel" name="cancel" class="btn btn-dark">

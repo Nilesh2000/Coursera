@@ -1,7 +1,8 @@
 <?php 
 
-  require_once 'pdo.php';
   session_start();
+
+  require_once 'pdo.php';
 
   if(!isset($_GET['profile_id'])) {
     $_SESSION['status'] = "Missing profile_id";
@@ -12,12 +13,12 @@
 
   $profile_id = htmlentities($_GET['profile_id']);
 
-  $sql = "SELECT * FROM profile WHERE profile_id=:pid";
+  $sql  = "SELECT * FROM profile WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  $sql = "SELECT * FROM education LEFT JOIN institution ON education.institution_id = institution.institution_id WHERE profile_id=:pid ORDER BY rank";
+  $sql  = "SELECT * FROM education LEFT JOIN institution ON education.institution_id = institution.institution_id WHERE profile_id=:pid ORDER BY rank";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $schools = array();
@@ -26,7 +27,7 @@
     $schools[] = $school;
   }
 
-  $sql = "SELECT * FROM position WHERE profile_id=:pid";
+  $sql  = "SELECT * FROM position WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $positions = array();
@@ -37,7 +38,7 @@
 
   if($row == false) {
     $_SESSION['status'] = "Could not load profile";
-    $_SESSION['color'] = "red";
+    $_SESSION['color']  = "red";
     header("Location: index.php");
     return;
   }

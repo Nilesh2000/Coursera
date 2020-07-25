@@ -1,6 +1,7 @@
 <?php 
 
   require_once 'pdo.php';
+  
   session_start();
 
   if(!isset($_GET['profile_id'])) {

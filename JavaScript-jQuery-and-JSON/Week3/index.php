@@ -1,6 +1,7 @@
 <?php 
 
 	session_start();
+	
 	require_once 'pdo.php';
 
   $logged_in = false;
@@ -66,7 +67,7 @@
 							<tr>
 								<td>
 									<a href="view.php?profile_id=<?= $profile['profile_id']; ?>">
-										<?php echo $profile['first_name'] . ' ' . $profile['last_name']; ?>
+										<?= $profile['first_name'] . ' ' . $profile['last_name']; ?>
 									</a>
 								</td>
 								<td>
@@ -108,7 +109,7 @@
 									<tr>
 										<td>
 											<a href="view.php?profile_id=<?= $profile['profile_id']; ?>">
-												<?php echo $profile['first_name'] . ' ' . $profile['last_name']; ?>
+												<?= $profile['first_name'] . ' ' . $profile['last_name']; ?>
 											</a>
 										</td>
 										<td>

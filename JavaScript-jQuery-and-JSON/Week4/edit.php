@@ -1,20 +1,21 @@
 <?php 
 
-  require_once 'pdo.php';
   session_start();
 
-  if(!isset($_SESSION['user_id'])) {
+  require_once 'pdo.php';
+
+  if( !isset($_SESSION['user_id']) ) {
     die("ACCESS DENIED");
   }
 
-  if(isset($_POST['cancel'])) {
+  if( isset($_POST['cancel']) ) {
     header("Location: index.php");
     return;
   }
 
   $status = false;
 
-  if(isset($_SESSION['status'])) {
+  if( isset($_SESSION['status']) ) {
     $status       = $_SESSION['status'];
     $status_color = $_SESSION['color'];
 
@@ -24,7 +25,7 @@
 
   $_SESSION['color'] = "red";
 
-  if(!isset($_GET['profile_id'])) {
+  if( !isset($_GET['profile_id']) ) {
     $_SESSION['status'] = "Missing profile_id";
     header("Location: index.php");
     return;
@@ -32,11 +33,11 @@
 
   $profile_id = htmlentities($_GET['profile_id']);
   
-  if(isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) 
-    && isset($_POST['headline']) && isset($_POST['summary'])) {
+  if( isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) 
+    && isset($_POST['headline']) && isset($_POST['summary']) ) {
 
-    if(strlen($_POST['first_name']) < 1 || strlen($_POST['last_name']) < 1 || strlen($_POST['email']) < 1 
-      || strlen($_POST['headline']) < 1 || strlen($_POST['summary']) < 1) {
+    if( strlen($_POST['first_name']) == 0 || strlen($_POST['last_name']) == 0 || strlen($_POST['email']) == 0 
+      || strlen($_POST['headline']) == 0 || strlen($_POST['summary']) == 0 ) {
 
       $_SESSION['status'] = "All fields are required";
       header("Location: edit.php?profile_id=".$profile_id);
@@ -77,14 +78,14 @@
     $rank = 1;
 
     for($i = 1 ; $i <= 9; $i++) {
-      if(!isset($_POST['year'.$i])) continue;
-      if(!isset($_POST['desc'.$i])) continue;
+      if( !isset($_POST['year'.$i]) ) continue;
+      if( !isset($_POST['desc'.$i]) ) continue;
 
       $year = htmlentities($_POST['year'.$i]);
       $desc = htmlentities($_POST['desc'.$i]);
 
-      $sql = "INSERT INTO position (profile_id, rank, year, description)
-              VALUES(:pid, :rank, :year, :description)";
+      $sql  = "INSERT INTO position (profile_id, rank, year, description)
+               VALUES(:pid, :rank, :year, :description)";
       $stmt = $pdo->prepare($sql);
       $stmt->execute([
         ':pid'         => $profile_id,
@@ -99,14 +100,14 @@
     $rank = 1;
 
     for($i = 1 ; $i <= 9 ; $i++) {
-      if(!isset($_POST['edu_year'.$i])) continue;
-      if(!isset($_POST['edu_school'.$i])) continue;
+      if( !isset($_POST['edu_year'.$i]) ) continue;
+      if( !isset($_POST['edu_school'.$i]) ) continue;
 
-      $edu_year = htmlentities($_POST['edu_year'.$i]);
+      $edu_year   = htmlentities($_POST['edu_year'.$i]);
       $edu_school = htmlentities($_POST['edu_school'.$i]);
 
       // Check if entered school already exists in the table
-      $sql = "SELECT * FROM institution WHERE name = :edu_school LIMIT 1";
+      $sql  = "SELECT * FROM institution WHERE name = :edu_school LIMIT 1";
       $stmt = $pdo->prepare($sql);
       $stmt->execute([':edu_school' => $edu_school]);
       $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -118,16 +119,16 @@
 
       else {
         // If institution is not present in the table, insert it into the table
-        $sql = "INSERT INTO institution(name)
-                VALUES(:name)";
+        $sql  = "INSERT INTO institution(name)
+                 VALUES(:name)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':name' => $edu_school]);
         // Get the ID of the last inserted institution
         $institution_id = $pdo->lastInsertId();
       }
 
-      $sql = "INSERT INTO education(profile_id, institution_id, rank, year)
-              VALUES(:profile_id, :institution_id, :rank, :year)";
+      $sql  = "INSERT INTO education(profile_id, institution_id, rank, year)
+               VALUES(:profile_id, :institution_id, :rank, :year)";
       $stmt = $pdo->prepare($sql);
       $stmt->execute([
         ':profile_id'     => $profile_id,
@@ -151,7 +152,7 @@
   $stmt->execute([':pid' => $profile_id]);
   $profile = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  $sql = "SELECT * FROM education LEFT JOIN institution ON education.institution_id = institution.institution_id WHERE profile_id=:pid ORDER BY rank";
+  $sql  = "SELECT * FROM education LEFT JOIN institution ON education.institution_id = institution.institution_id WHERE profile_id=:pid ORDER BY rank";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $schools = array();
@@ -176,6 +177,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -187,14 +189,15 @@
 
   <title>Nilesh D</title>
 </head>
+
 <body>
   <div class="container">
     <h1>Editing Profile for <?= htmlentities($_SESSION['name']); ?></h1>
 
     <?php 
-    if($status != false) {
-      echo('<p style="color: '. $status_color. ';" class="col-sm-10 col-sm-offset-2">'.htmlentities($status)."</p>\n");
-    }
+      if($status != false) {
+        echo('<p style="color: '. $status_color. ';" class="col-sm-10 col-sm-offset-2">'.htmlentities($status)."</p>\n");
+      }
     ?>
 
     <form method="POST">
@@ -325,6 +328,7 @@
 </script>
 
 <script>
+
   countPos = <?= $numOfPositions; ?>;
   countEdu = <?= $numOfSchools; ?>;
 
@@ -333,6 +337,7 @@
 
     $('#addPos').click(function(event) {
       event.preventDefault();
+
       if(countPos >= 9) {
         alert("Maximum of nine position entries exceeded");
         return;
@@ -361,6 +366,7 @@
 
     $('#addEdu').click(function(event) {
       event.preventDefault();
+      
       if(countEdu >= 9) {
         alert("Maximum of nine education entries exceeded");
         return;

@@ -1,11 +1,12 @@
 <?php 
 
   session_start();
+
   require_once 'pdo.php';
 
-  if(!isset($_GET['profile_id'])) {
+  if( !isset($_GET['profile_id']) ) {
     $_SESSION['status'] = "Missing profile_id";
-    $_SESSION['color'] = "red";
+    $_SESSION['color']  = "red";
     header("Location: index.php");
     return;
   }
@@ -26,6 +27,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,8 +36,10 @@
 
   <title>Nilesh D</title>
 </head>
+
 <body>
   <div class="container">
+
     <h1>Profile information</h1>
     <p>First Name: <?= htmlentities($row['first_name']); ?></p>
     <p>Last Name: <?= htmlentities($row['last_name']); ?></p>
@@ -45,6 +49,7 @@
     <p>Summary: </p>
     <p><?= htmlentities($row['summary']); ?></p>
     <p><a href="index.php">Done</a></p>
+    
   </div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <?php 
 
   require_once 'pdo.php';
+  
   session_start();
 
   if(!isset($_SESSION['user_id'])) {
@@ -15,7 +16,7 @@
   $status = false;
 
   if(isset($_SESSION['status'])) {
-    $status = $_SESSION['status'];
+    $status       = $_SESSION['status'];
     $status_color = $_SESSION['color'];
 
     unset($_SESSION['status']);
@@ -35,8 +36,8 @@
   if(isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) 
     && isset($_POST['headline']) && isset($_POST['summary'])) {
 
-    if(strlen($_POST['first_name']) < 1 || strlen($_POST['last_name']) < 1 || strlen($_POST['email']) < 1 
-      || strlen($_POST['headline']) < 1 || strlen($_POST['summary']) < 1) {
+    if(strlen($_POST['first_name']) == 0 || strlen($_POST['last_name']) == 0 || strlen($_POST['email']) == 0 
+      || strlen($_POST['headline']) == 0 || strlen($_POST['summary']) == 0) {
 
       $_SESSION['status'] = "All fields are required";
       header("Location: edit.php?profile_id=".$profile_id);
@@ -55,7 +56,7 @@
     $headline   = htmlentities($_POST['headline']);
     $summary    = htmlentities($_POST['summary']);
 
-    $sql = "UPDATE profile SET first_name=:fn, last_name=:ln, email=:em, headline=:he, summary=:su WHERE profile_id=:pid";
+    $sql  = "UPDATE profile SET first_name=:fn, last_name=:ln, email=:em, headline=:he, summary=:su WHERE profile_id=:pid";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
       ':fn'  => $first_name,
@@ -66,7 +67,7 @@
       ':pid' => $profile_id,
     ]);
 
-    $sql = "DELETE from position WHERE profile_id=:pid";
+    $sql  = "DELETE from position WHERE profile_id=:pid";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':pid' => $profile_id]);
 
@@ -83,29 +84,30 @@
               VALUES(:pid, :rank, :year, :description)";
       $stmt = $pdo->prepare($sql);
       $stmt->execute([
-        ':pid' => $profile_id,
-        ':rank' => $rank,
-        ':year' => $year,
+        ':pid'         => $profile_id,
+        ':rank'        => $rank,
+        ':year'        => $year,
         ':description' => $desc,
       ]);
       $rank++;
     }
 
     $_SESSION['status'] = "Profile updated";
-    $_SESSION['color'] = "green";
+    $_SESSION['color']  = "green";
 
     header("Location: index.php");
     return;
   }
 
-  $sql = "SELECT * FROM profile WHERE profile_id=:pid";
-  $stmt = $pdo->prepare($sql);
+  $sql     = "SELECT * FROM profile WHERE profile_id=:pid";
+  $stmt    = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $profile = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  $sql = "SELECT * FROM position WHERE profile_id=:pid";
+  $sql  = "SELECT * FROM position WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
+
   $position = array();
 
   while($row = $stmt->fetch(PDO::FETCH_OBJ)) {
@@ -220,35 +222,35 @@
   countPos = <?= $numOfPositions; ?>;
 
   $(document).ready(function() {
-      window.console && console.log('Document ready called');
-      $('#addPos').click(function(event) {
-        event.preventDefault();
-        if (countPos >= 9) {
-          alert("Maximum of nine position entries exceeded");
-          return;
-        }
-        countPos++;
-        window.console && console.log("Adding position "+countPos);
+    window.console && console.log('Document ready called');
+    $('#addPos').click(function(event) {
+      event.preventDefault();
+      if(countPos >= 9) {
+        alert("Maximum of nine position entries exceeded");
+        return;
+      }
+      countPos++;
+      window.console && console.log("Adding position "+countPos);
 
-        $('#position_fields').append(
-          '<div id="position'+countPos+'"> \
-            \
-            <div class="form-group row"> \
-              <label class="col-form-label col-sm-2">Year:</label> \
-              <div class="col-sm-3"> \
-                <input class="form-control" type="text" name="year'+countPos+'"> \
-              </div> \
-              <button class="btn btn-danger" onclick="$(\'#position'+countPos+'\').remove();return false;">-</button> \
+      $('#position_fields').append(
+        '<div id="position'+countPos+'"> \
+          \
+          <div class="form-group row"> \
+            <label class="col-form-label col-sm-2">Year:</label> \
+            <div class="col-sm-3"> \
+              <input class="form-control" type="text" name="year'+countPos+'"> \
             </div> \
-            \
-            <div class="col-sm-6 p-0"> \
-              <textarea class="form-control" name="desc'+countPos+'" rows="8"></textarea> \
-            </div> \
+            <button class="btn btn-danger" onclick="$(\'#position'+countPos+'\').remove();return false;">-</button> \
           </div> \
-          <br>'
-        );
-      });
+          \
+          <div class="col-sm-6 p-0"> \
+            <textarea class="form-control" name="desc'+countPos+'" rows="8"></textarea> \
+          </div> \
+        </div> \
+        <br>'
+      );
     });
+  });
 
 </script>
 

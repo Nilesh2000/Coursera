@@ -1,43 +1,46 @@
 <?php 
-
+  
   session_start();
+
   require_once 'pdo.php';
 
-  if(!isset($_SESSION['user_id'])) {
+
+  if( !isset($_SESSION['user_id']) ) {
     die("Not logged in");
   }
 
-  if(isset($_POST['cancel'])) {
+  if( isset($_POST['cancel']) ) {
     header("Location: index.php");
     return;
   }
 
-  if(!isset($_GET['profile_id'])) {
+  if( !isset($_GET['profile_id']) ) {
     $_SESSION['status'] = "Missing profile_id";
-    $_SESSION['color'] = "red";
+    $_SESSION['color']  = "red";
     header("Location: index.php");
     return;
   }
 
   $profile_id = htmlentities($_GET['profile_id']);
  
-  if(isset($_POST['delete'])) {  
+  if( isset($_POST['delete']) ) {  
     $profile_id = $_POST['profile_id'];
-    $sql = "DELETE FROM profile WHERE profile_id=:pid";
-    $stmt = $pdo->prepare($sql);
+    $sql        = "DELETE FROM profile WHERE profile_id=:pid";
+    $stmt       = $pdo->prepare($sql);
     $stmt->execute([':pid' => $profile_id]);
 
     $_SESSION['status'] = "Record deleted";
-    $_SESSION['color'] = "green";
+    $_SESSION['color']  = "green";
 
     header("Location: index.php");
     return;
   }
 
-  $sql = "SELECT first_name, last_name FROM profile WHERE profile_id=:pid";
+  $sql  = "SELECT first_name, last_name FROM profile WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
   $profile = $stmt->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -52,12 +55,13 @@
 </head>
 <body>
   <div class="container">
+
     <h1>Deleting Profile</h1>
     <p>First Name: <?= $profile['first_name']; ?></p>
     <p>Last Name: <?= $profile['last_name']; ?></p>
 
-    <form method="post">
-      <input type="hidden" name="profile_id" value=<?= $_GET['profile_id']; ?>>
+    <form method="POST">
+      <input type="hidden" name="profile_id" value=<?= $profile_id; ?>>
       <input type="submit" value="Delete" name="delete" class="btn btn-primary">
       <input type="submit" value="Cancel" name="cancel" class="btn btn-dark">
     </form>

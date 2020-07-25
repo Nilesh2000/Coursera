@@ -1,17 +1,19 @@
 <?php 
 
 	session_start();
+
 	require_once 'pdo.php';
 
+
   $logged_in = false;
-  $profiles = array();
+  $profiles  = array();
 
   if(isset($_SESSION['name'])) {
 		$logged_in = true;
-		$status = false;
+		$status 	= false;
 
 		if(isset($_SESSION['status'])) {
-			$status = htmlentities($_SESSION['status']);
+			$status 			= htmlentities($_SESSION['status']);
 			$status_color = htmlentities($_SESSION['color']);
 
 			unset($_SESSION['status']);
@@ -19,7 +21,7 @@
 		}
 	}
 
-	$sql = "SELECT * FROM profile";
+	$sql 	= "SELECT * FROM profile";
 	$stmt = $pdo->query($sql);
 	while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		$profiles[] = $row;
@@ -66,7 +68,7 @@
 							<tr>
 								<td>
 									<a href="view.php?profile_id=<?= $profile['profile_id']; ?>">
-										<?php echo $profile['first_name'] . ' ' . $profile['last_name']; ?>
+										<?= $profile['first_name'] . ' ' . $profile['last_name']; ?>
 									</a>
 								</td>
 								<td>
@@ -108,7 +110,7 @@
 									<tr>
 										<td>
 											<a href="view.php?profile_id=<?= $profile['profile_id']; ?>">
-												<?php echo $profile['first_name'] . ' ' . $profile['last_name']; ?>
+												<?= $profile['first_name'] . ' ' . $profile['last_name']; ?>
 											</a>
 										</td>
 										<td>

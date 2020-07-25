@@ -1,7 +1,7 @@
 <?php 
 
   // Check for GET paramter
-  if(!isset($_GET['name']) || strlen($_GET['name']) < 1) {
+  if(!isset($_GET['name']) || strlen($_GET['name']) == 0) {
     die("Name paramter missing");
   }
 

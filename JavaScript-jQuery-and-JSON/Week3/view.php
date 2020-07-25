@@ -1,9 +1,9 @@
 <?php 
 
-  require_once 'inc/pdo.php';
-  
   session_start();
 
+  require_once 'inc/pdo.php';
+  
   if(!isset($_GET['profile_id'])) {
     $_SESSION['status'] = "Missing profile_id";
     $_SESSION['color'] = "red";
@@ -13,10 +13,10 @@
 
   $profile_id = htmlentities($_GET['profile_id']);
 
-  $sql = "SELECT * FROM profile WHERE profile_id=:pid";
+  $sql  = "SELECT * FROM profile WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':pid' => $profile_id]);
-  $row = $stmt->fetch();
+  $row  = $stmt->fetch();
 
   $sql  = "SELECT * FROM position WHERE profile_id=:pid";
   $stmt = $pdo->prepare($sql);
@@ -45,21 +45,27 @@
 </head>
 <body>
   <div class="container">
+
     <h1>Profile information</h1>
     <p>First Name: <?= htmlentities($row['first_name']); ?></p>
     <p>Last Name: <?= htmlentities($row['last_name']); ?></p>
     <p>Email: <?= htmlentities($row['email']); ?></p>
+
     <p>Headline: </p>
     <p><?= htmlentities($row['headline']); ?></p>
+    
     <p>Summary: </p>
     <p><?= htmlentities($row['summary']); ?></p>
+
     <p>Position</p>
     <ul>
       <?php foreach($positions as $position) : ?>
         <li><?= $position['year']; ?>: <?= $position['description']; ?></li>
       <?php endforeach; ?>
     </ul>
+
     <p><a href="index.php">Done</a></p>
+
   </div>
 </body>
 </html>

@@ -1,13 +1,10 @@
 <?php 
 
-  require_once 'inc/pdo.php';
-  
   session_start();
 
-  if(!isset($_SESSION['user_id'])) {
-    die("ACCESS DENIED");
-  }
-
+  require_once 'inc/pdo.php';
+  require_once 'inc/logged_in.php';
+  
   if(isset($_POST['cancel'])) {
     header("Location: index.php");
     return;
@@ -15,8 +12,8 @@
 
   $status = false;
 
-  if(isset($_SESSION['status'])) {
-    $status = $_SESSION['status'];
+  if( isset($_SESSION['status']) ) {
+    $status       = $_SESSION['status'];
     $status_color = $_SESSION['color'];
 
     unset($_SESSION['status']);
@@ -25,18 +22,18 @@
 
   $_SESSION['color'] = "red";
 
-  if(isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) 
-    && isset($_POST['headline']) && isset($_POST['summary'])) {
+  if( isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) 
+    && isset($_POST['headline']) && isset($_POST['summary']) ) {
 
-    if(strlen($_POST['first_name']) == 0 || strlen($_POST['last_name']) == 0 || strlen($_POST['email']) == 0 
-      || strlen($_POST['headline']) == 0 || strlen($_POST['summary']) == 0) {
+    if( strlen($_POST['first_name']) == 0 || strlen($_POST['last_name']) == 0 || strlen($_POST['email']) == 0 
+      || strlen($_POST['headline']) == 0 || strlen($_POST['summary']) == 0 ) {
 
       $_SESSION['status'] = "All fields are required";
       header("Location: add.php");
       return;
     }
 
-    if(strpos($_POST['email'], '@') === false) {
+    if( strpos($_POST['email'], '@') === false ) {
       $_SESSION['status'] = "Email address must contain @";
       header("Location: add.php");
       return;
@@ -48,7 +45,7 @@
     $headline   = htmlentities($_POST['headline']);
     $summary    = htmlentities($_POST['summary']);
 
-    $sql = "INSERT INTO profile(user_id, first_name, last_name, email, headline, summary)
+    $sql  = "INSERT INTO profile(user_id, first_name, last_name, email, headline, summary)
             VALUES(:uid, :fn, :ln, :em, :he, :su)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -133,7 +130,7 @@
     }
 
     $_SESSION['status'] = "Profile added";
-    $_SESSION['color'] = "green";
+    $_SESSION['color']  = "green";
 
     header("Location: index.php");
     return;

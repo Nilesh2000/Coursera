@@ -1,21 +1,18 @@
 <?php 
 
-  require_once 'inc/pdo.php';
-  
   session_start();
 
-  if(!isset($_SESSION['user_id'])) {
-    die("Not logged in");
-  }
-
-  if(isset($_POST['cancel'])) {
+  require_once 'inc/pdo.php';
+  require_once 'inc/logged_in.php';
+  
+  if( isset($_POST['cancel']) ) {
     header("Location: index.php");
     return;
   }
 
   $status = false;
 
-  if(isset($_SESSION['status'])) {
+  if( isset($_SESSION['status']) ) {
     $status       = $_SESSION['status'];
     $status_color = $_SESSION['color'];
 
@@ -25,7 +22,7 @@
 
   $_SESSION['color'] = "red";
 
-  if(!isset($_GET['profile_id'])) {
+  if( !isset($_GET['profile_id']) ) {
     $_SESSION['status'] = "Missing profile_id";
     header("Location: index.php");
     return;

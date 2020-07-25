@@ -1,12 +1,9 @@
 <?php 
 
-  require_once 'inc/pdo.php';
-
   session_start();
 
-  if( !isset($_SESSION['user_id']) ) {
-    die("Not logged in");
-  }
+  require_once 'inc/pdo.php';
+  require_once 'inc/logged_in.php';
 
   if( isset($_POST['cancel']) ) {
     header("Location: index.php");

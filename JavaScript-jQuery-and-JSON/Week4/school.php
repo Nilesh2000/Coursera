@@ -3,10 +3,7 @@
   session_start();
 
   require_once 'inc/pdo.php';
-
-  if( !isset($_SESSION['user_id']) ) {
-    die("ACCESS DENIED");
-  }
+  require_once 'inc/logged_in.php';
 
   // add.php/edit.php sends a GET request to school.php with a term parameter
   if(isset($_GET['term'])) {

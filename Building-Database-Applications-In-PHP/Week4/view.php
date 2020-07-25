@@ -1,19 +1,16 @@
 <?php 
 
-session_start();
+  session_start();
 
-if(!isset($_SESSION['name'])) {
-  die("Not logged in");
-}
+  require_once 'inc/pdo.php';
 
-require_once 'pdo.php';
-
-$autos = array();
-$stmt = $pdo->query("SELECT * FROM db");
-
-  while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $autos[] = $row;
+  if(!isset($_SESSION['name'])) {
+    die("Not logged in");
   }
+
+  $autos = array();
+  $stmt  = $pdo->query("SELECT * FROM db");
+  $autos = $stmt->fetchAll();
 
 ?>
 
@@ -30,7 +27,7 @@ $stmt = $pdo->query("SELECT * FROM db");
 <body>
   <div class="container">
 
-    <h1>Tracking Autos for <?php echo $_SESSION['name'] ?></h1>
+    <h1>Tracking Autos for <?= $_SESSION['name'] ?></h1>
     
     <?php
     if(isset($_SESSION['success'])) {
@@ -43,7 +40,7 @@ $stmt = $pdo->query("SELECT * FROM db");
       <ul>
         <?php foreach($autos as $auto) : ?>
           <li>
-            <?php echo $auto['year']; ?> <?php echo $auto['make']; ?> <?php echo $auto['mileage']; ?>
+            <?= $auto['year']; ?> <?= $auto['make']; ?> <?= $auto['mileage']; ?>
           </li>  
         <?php endforeach; ?>
       </ul>

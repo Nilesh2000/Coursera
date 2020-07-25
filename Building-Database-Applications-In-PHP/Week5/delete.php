@@ -1,7 +1,8 @@
 <?php 
 
-  require_once 'pdo.php';
   session_start();
+
+  require_once 'inc/pdo.php';
 
   if( !isset($_SESSION['name']) ) {
     die("ACCESS ERROR");
@@ -26,7 +27,7 @@
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':auto_id' => $auto_id]);
 
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $row = $stmt->fetch();
   }
 
 ?>
@@ -47,7 +48,7 @@
   <div class="container">
 
     <p>
-      Confirm: Deleting <?php echo $row['make']; ?>
+      Confirm: Deleting <?= $row['make']; ?>
     </p>
 
     <form method="POST">

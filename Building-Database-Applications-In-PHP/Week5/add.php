@@ -1,7 +1,8 @@
 <?php 
 
-  require_once 'pdo.php';
   session_start();
+
+  require_once 'inc/pdo.php';
 
   if( !isset($_SESSION['name']) ) {
     die("ACCESS DENIED");
@@ -21,7 +22,6 @@
     unset($_SESSION['status']);
     unset($_SESSION['color']);
   }
-
 
   $name = htmlentities($_SESSION['name']);
 
@@ -55,11 +55,11 @@
     $sql = "INSERT INTO db VALUES(AUTO_ID, :make, :model, :year, :mileage)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-                    ':make'    => $make,
-                    ':model'   => $model,
-                    ':year'    => $year,
-                    ':mileage' => $mileage,
-                  ]);
+      ':make'    => $make,
+      ':model'   => $model,
+      ':year'    => $year,
+      ':mileage' => $mileage,
+    ]);
                     
     $_SESSION['status'] = "Record added";
     $_SESSION['color']  = "green";
@@ -85,7 +85,7 @@
 <body>
   <div class="container">
 
-  <h1>Tracking Automobiles for <?php echo $name; ?></h1>
+  <h1>Tracking Automobiles for <?= $name; ?></h1>
   <br>
 
   <?php 

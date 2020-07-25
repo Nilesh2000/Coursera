@@ -1,13 +1,13 @@
 <?php
 
-  require_once 'pdo.php';
+  require_once 'inc/pdo.php';
 
   // Check for a GET parameter
-  if(!isset($_GET['name']) || strlen($_GET['name']) < 1) {
+  if( !isset($_GET['name']) || strlen($_GET['name']) == 0 ) {
     die("Name paramter missing.");
   }
 
-  if(strpos($_GET['name'], '@') === false ) {
+  if( strpos($_GET['name'], '@') === false ) {
       die('Name parameter is wrong');
   }
 
@@ -24,7 +24,7 @@
 
   if( isset($_POST['make']) && isset($_POST['year']) && isset($_POST['mileage']) ) {
 
-    if(strlen($_POST['make']) < 1) {
+    if(strlen($_POST['make']) == 0) {
       $status = "Make is required";
     } 
     
@@ -54,10 +54,7 @@
   $autos = array();
   $sql   = "SELECT * FROM db";
   $stmt  = $pdo->query($sql);
-
-  while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $autos[] = $row;
-  }
+  $autos = $stmt->fetchAll();
 
 ?>
 
@@ -76,7 +73,7 @@
 
 <body>
   <div class="container">
-    <h1>Tracking Autos For <?php echo $name; ?></h1>
+    <h1>Tracking Autos For <?= $name; ?></h1>
     <br><br>
 
     <?php 
@@ -122,7 +119,7 @@
       <ul>
         <?php foreach($autos as $auto) : ?>
           <li>
-            <?php echo $auto['year']; ?> <?php echo $auto['make']; ?> <?php echo $auto['mileage']; ?>
+            <?= $auto['year']; ?> <?= $auto['make']; ?> <?= $auto['mileage']; ?>
           </li>
         <?php endforeach; ?>
       </ul>

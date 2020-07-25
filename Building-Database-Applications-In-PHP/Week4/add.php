@@ -1,7 +1,8 @@
 <?php 
 
-  require_once 'pdo.php';
   session_start();
+
+  require_once 'inc/pdo.php';
 
   if( !isset($_SESSION['name']) ) {
     die("Not logged in");
@@ -63,7 +64,7 @@
 <body>
   <div class="container">
 
-    <h1>Tracking Autos for <?php echo $_SESSION['name']; ?></h1>
+    <h1>Tracking Autos for <?= $_SESSION['name']; ?></h1>
 
     <?php 
       if(isset($_SESSION['error'])) {

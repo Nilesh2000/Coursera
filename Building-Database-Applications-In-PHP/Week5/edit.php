@@ -1,7 +1,8 @@
 <?php 
 
-  require_once 'pdo.php';
   session_start();
+
+  require_once 'inc/pdo.php';
 
   if( !isset($_SESSION['name']) ) {
     die("ACCESS ERROR");
@@ -58,12 +59,13 @@
       $sql  = "UPDATE db SET make=:make, model=:model, year=:year, mileage=:mileage WHERE auto_id=:auto_id";
       $stmt = $pdo->prepare($sql);
       $stmt->execute([
-                      ':make'    => $make,
-                      ':model'   => $model,
-                      ':year'    => $year,
-                      ':mileage' => $mileage,
-                      ':auto_id' => $auto_id,
-                    ]);
+        ':make'    => $make,
+        ':model'   => $model,
+        ':year'    => $year,
+        ':mileage' => $mileage,
+        ':auto_id' => $auto_id,
+      ]);
+      
       $_SESSION['status'] = "Record edited";
       $_SESSION['color']  = "green";
 
@@ -77,7 +79,7 @@
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['auto_id' => $auto_id]);
 
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch();
   }
 
 ?>

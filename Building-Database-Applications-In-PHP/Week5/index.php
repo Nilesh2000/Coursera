@@ -2,6 +2,8 @@
 
   session_start();
 
+  require_once 'inc/pdo.php';
+
   $logged_in = false;
   $autos = array();
 
@@ -17,12 +19,8 @@
       unset($_SESSION['color']);
     }
 
-    require_once 'pdo.php';
-
-    $stmt = $pdo->query("SELECT * FROM db");
-    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      $autos[] = $row;
-    }
+    $stmt  = $pdo->query("SELECT * FROM db");
+    $autos = $stmt->fetchAll();
   }
 
 ?>
@@ -93,14 +91,14 @@
               <?php foreach($autos as $auto) : ?>
 
                 <tr>
-                  <td><?php echo $auto['make']; ?></td>
-                  <td><?php echo $auto['model']; ?></td>
-                  <td><?php echo $auto['year']; ?></td>
-                  <td><?php echo $auto['mileage']; ?></td>
+                  <td><?= $auto['make']; ?></td>
+                  <td><?= $auto['model']; ?></td>
+                  <td><?= $auto['year']; ?></td>
+                  <td><?= $auto['mileage']; ?></td>
                   <td>
-                    <a href="edit.php?autos_id=<?php echo $auto['auto_id']; ?>">Edit</a>
+                    <a href="edit.php?autos_id=<?= $auto['auto_id']; ?>">Edit</a>
                     / 
-                    <a href="delete.php?autos_id=<?php echo $auto['auto_id']; ?>">Delete</a>
+                    <a href="delete.php?autos_id=<?= $auto['auto_id']; ?>">Delete</a>
                   </td>
                 </tr>
 

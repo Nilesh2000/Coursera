@@ -1,7 +1,7 @@
 <?php 
 
   // If the cancel button is clicked
-  if(isset($_POST['logout'])) {
+  if( isset($_POST['logout']) ) {
     header('Location: index.php');
     return;
   }

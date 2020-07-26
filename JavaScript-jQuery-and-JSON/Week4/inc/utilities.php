@@ -74,7 +74,7 @@
       if( !isset($_POST['edu_year'.$i]) ) continue;
       if( !isset($_POST['edu_school'.$i]) ) continue;
 
-      $edu_year = htmlentities($_POST['edu_year'.$i]);
+      $edu_year   = htmlentities($_POST['edu_year'.$i]);
       $edu_school = htmlentities($_POST['edu_school'.$i]);
 
       // Check if entered school already exists in the table

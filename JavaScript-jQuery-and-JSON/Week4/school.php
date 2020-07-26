@@ -3,7 +3,7 @@
   session_start();
 
   require_once 'inc/pdo.php';
-  require_once 'inc/logged_in.php';
+  // require_once 'inc/logged_in.php'; - Do not include this script. Don't ask me why
 
   // add.php/edit.php sends a GET request to school.php with a term parameter
   if(isset($_GET['term'])) {
@@ -15,7 +15,7 @@
     while($row = $stmt->fetch()) {
       $schools[] = $row['name'];
     }
-    echo json_encode($schools, JSON_PRETTY_PRINT);
+    echo (json_encode($schools, JSON_PRETTY_PRINT));
   }
 
 ?>

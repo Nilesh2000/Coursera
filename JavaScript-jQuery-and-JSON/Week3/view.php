@@ -3,6 +3,7 @@
   session_start();
 
   require_once 'inc/pdo.php';
+  require_once 'inc/utilities.php';
   
   if(!isset($_GET['profile_id'])) {
     $_SESSION['status'] = "Missing profile_id";
@@ -18,11 +19,7 @@
   $stmt->execute([':pid' => $profile_id]);
   $row  = $stmt->fetch();
 
-  $sql  = "SELECT * FROM position WHERE profile_id=:pid";
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute([':pid' => $profile_id]);
-  $positions = array();
-  $positions = $stmt->fetchAll();
+  $positions = loadPos($pdo, $profile_id);
 
   if($row == false) {
     $_SESSION['status'] = "Could not load profile";

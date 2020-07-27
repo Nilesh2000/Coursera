@@ -4,20 +4,11 @@
 
   require_once 'inc/pdo.php';
   require_once 'inc/logged_in.php';
+  require_once 'inc/utilities.php';
   
   if( isset($_POST['cancel']) ) {
     header("Location: index.php");
     return;
-  }
-
-  $status = false;
-
-  if( isset($_SESSION['status']) ) {
-    $status       = $_SESSION['status'];
-    $status_color = $_SESSION['color'];
-
-    unset($_SESSION['status']);
-    unset($_SESSION['color']);
   }
 
   $_SESSION['color'] = "red";
@@ -29,24 +20,18 @@
   }
 
   $profile_id = htmlentities($_GET['profile_id']);
+
+  if( isset($_POST['first_name']) && isset($_POST['last_name']) && 
+      isset($_POST['email']) && isset($_POST['headline']) && 
+      isset($_POST['summary']) ) {
+
+      $msg = validateProfile();
+      if( is_string($msg) ) {
+        $_SESSION['status'] = $msg;
+        header("Location: edit.php?profile_id=".$profile_id);
+        return;
+      }
   
-  if(isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) 
-    && isset($_POST['headline']) && isset($_POST['summary'])) {
-
-    if(strlen($_POST['first_name']) == 0 || strlen($_POST['last_name']) == 0 || strlen($_POST['email']) == 0 
-      || strlen($_POST['headline']) == 0 || strlen($_POST['summary']) == 0) {
-
-      $_SESSION['status'] = "All fields are required";
-      header("Location: edit.php?profile_id=".$profile_id);
-      return;
-    }
-
-    if(strpos($_POST['email'], '@') === false) {
-      $_SESSION['status'] = "Email address must contain @";
-      header("Location: edit.php?profile_id=".$profile_id);
-      return;
-    }
-
     $first_name = htmlentities($_POST['first_name']);
     $last_name  = htmlentities($_POST['last_name']);
     $email      = htmlentities($_POST['email']);
@@ -67,27 +52,7 @@
     $sql  = "DELETE from position WHERE profile_id=:pid";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':pid' => $profile_id]);
-
-    $rank = 1;
-
-    for($i = 1 ; $i <= 9; $i++) {
-      if(!isset($_POST['year'.$i])) continue;
-      if(!isset($_POST['desc'.$i])) continue;
-
-      $year = htmlentities($_POST['year'.$i]);
-      $desc = htmlentities($_POST['desc'.$i]);
-
-      $sql = "INSERT INTO position (profile_id, rank, year, description)
-              VALUES(:pid, :rank, :year, :description)";
-      $stmt = $pdo->prepare($sql);
-      $stmt->execute([
-        ':pid'         => $profile_id,
-        ':rank'        => $rank,
-        ':year'        => $year,
-        ':description' => $desc,
-      ]);
-      $rank++;
-    }
+    insertPositions($pdo, $profile_id);
 
     $_SESSION['status'] = "Profile updated";
     $_SESSION['color']  = "green";
@@ -101,12 +66,7 @@
   $stmt->execute([':pid' => $profile_id]);
   $profile = $stmt->fetch();
 
-  $sql  = "SELECT * FROM position WHERE profile_id=:pid";
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute([':pid' => $profile_id]);
-
-  $position = array();
-  $position = $stmt->fetchAll();
+  $positions = loadPos($pdo, $profile_id);
 
   $numOfPositions = count($position);
 ?>
@@ -117,7 +77,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <?php include 'inc/head.php'; ?>
 
   <title>Nilesh D</title>
 </head>
@@ -125,11 +85,7 @@
   <div class="container">
     <h1>Editing Profile for <?= htmlentities($_SESSION['name']); ?></h1>
 
-    <?php 
-    if($status != false) {
-      echo('<p style="color: '. $status_color. ';" class="col-sm-10 col-sm-offset-2">'.htmlentities($status)."</p>\n");
-    }
-    ?>
+    <?php flashMessage(); ?>
 
     <form method="POST">
       
@@ -202,15 +158,11 @@
         <?php endif; ?>
       </div>
 
-      <input type="submit" value="Save" class="btn btn-primary mt-2">
-      <input type="submit" value="Cancel" class="btn btn-dark mt-2" name="cancel">
+      <input type="submit" value="Save" class="btn btn-primary">
+      <input type="submit" value="Cancel" class="btn btn-dark" name="cancel">
     </form>
   </div>
 </body>
-
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
-</script>
 
 <script>
   countPos = <?= $numOfPositions; ?>;

@@ -9,7 +9,7 @@
     return;
   }
 
-  $salt = 'XyZzy12*_';
+  $salt        = 'XyZzy12*_';
   $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1'; // Password is php123
 
   $error = false;
@@ -19,8 +19,8 @@
     unset($_SESSION['error']);
   }
 
-  if(isset($_POST['email']) && isset($_POST['pass'])) {
-    if(strlen($_POST['email']) == 0 || strlen($_POST['pass']) == 0) {
+  if( isset($_POST['email']) && isset($_POST['pass']) ) {
+    if( strlen($_POST['email']) == 0 || strlen($_POST['pass']) == 0 ) {
       $_SESSION['error'] = "User name and password are required";
       header("Location: login.php");
       return;
@@ -33,12 +33,12 @@
     $sql   = "SELECT user_id, name FROM users WHERE email = :email and password = :password";
     $stmt  = $pdo->prepare($sql);
     $stmt->execute([
-      ':email' => $email, 
+      ':email'    => $email, 
       ':password' => $check,
     ]);
     $row = $stmt->fetch();
     
-    if($row != false) {
+    if( $row != false ) {
       $_SESSION['name']    = $row['name'];
       $_SESSION['user_id'] = $row['user_id'];
       header("Location: index.php");

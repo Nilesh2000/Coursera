@@ -131,35 +131,42 @@
     countPos = 0;
 
     $(document).ready(function() {
-      window.console && console.log('Document ready called');
       $('#addPos').click(function(event) {
         event.preventDefault();
         if (countPos >= 9) {
           alert("Maximum of nine position entries exceeded");
           return;
         }
+
         countPos++;
         window.console && console.log("Adding position "+countPos);
 
-        $('#position_fields').append(
-          '<div id="position'+countPos+'"> \
-            \
-            <div class="form-group row"> \
-              <label class="col-form-label col-sm-2">Year:</label> \
-              <div class="col-sm-3"> \
-                <input class="form-control" type="text" name="year'+countPos+'"> \
-              </div> \
-              <button class="btn btn-danger" onclick="$(\'#position'+countPos+'\').remove();return false;">-</button> \
-            </div> \
-            \
-            <div class="col-sm-6 p-0"> \
-              <textarea class="form-control" name="desc'+countPos+'" rows="8"></textarea> \
-            </div> \
-          </div> \
-          <br>'
-        );
+        var source = $("#position-template").html();
+        $('#position_fields').append(source.replace(/@COUNT@/g, countPos));
+
       });
     });
+
+  </script>
+
+  <script id="position-template" type="text">
+
+    <div id="position@COUNT@">
+
+      <div class="form-group row"> 
+        <label class="col-form-label col-sm-2">Year:</label> 
+        <div class="col-sm-3"> 
+          <input class="form-control" type="text" name="year@COUNT@"> 
+        </div> 
+        <button class="btn btn-danger" onclick="$('#position@COUNT@).remove();return false;">-</button> 
+      </div> 
+      
+      <div class="col-sm-6 p-0"> 
+        <textarea class="form-control" name="desc@COUNT@" rows="8"></textarea> 
+      </div> 
+
+    </div> 
+    <br>
 
   </script>
 </body>

@@ -1,7 +1,7 @@
 {
-  "name": "week1",
+  "name": "confusion",
   "version": "1.0.0",
-  "description": "Week 1 coursework",
+  "description": "A page for the conFusion Restaurant",
   "main": "index.html",
   "scripts": {
     "start": "npm run watch:all",

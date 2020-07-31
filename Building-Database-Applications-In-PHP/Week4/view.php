@@ -3,10 +3,7 @@
   session_start();
 
   require_once 'inc/pdo.php';
-
-  if(!isset($_SESSION['name'])) {
-    die("Not logged in");
-  }
+  require_once 'inc/logged_in.php';
 
   $autos = array();
   $stmt  = $pdo->query("SELECT * FROM db");

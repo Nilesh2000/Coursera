@@ -3,10 +3,8 @@
   session_start();
 
   require_once 'inc/pdo.php';
-
-  if( !isset($_SESSION['name']) ) {
-    die("ACCESS ERROR");
-  }
+  require_once 'inc/logged_in.php';
+  require_once 'inc/utilities.php';
 
   if( isset($_POST['cancel']) ) {
     header("Location: index.php");
@@ -15,7 +13,7 @@
 
   $status = false;
 
-  if(isset($_SESSION['status'])) {
+  if( isset($_SESSION['status']) ) {
     $status        = htmlentities($_SESSION['status']);
     $status_colour = htmlentities($_SESSION['color']);
 
@@ -30,21 +28,10 @@
   if( isset($_GET['autos_id']) ) {
     
     if( isset($_POST['make']) && isset($_POST['model']) && isset($_POST['year']) && isset($_POST['mileage']) ) {
-      
-      if( strlen($_POST['make']) == 0 || strlen($_POST['model']) == 0 || strlen($_POST['year']) == 0 || strlen($_POST['mileage']) == 0 ) {
-        $_SESSION['status'] = "All fields are required";
-        header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
-        return;
-      }
-      
-      if( !is_numeric($_POST['year']) ) {
-        $_SESSION['status'] = "Year must be an integer";
-        header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
-        return;
-      }
-      
-      if( !is_numeric($_POST['mileage']) ) {
-        $_SESSION['status'] = "Mileage must be an integer";
+
+      $msg = validateProfile();
+      if( is_string($msg) ) {
+        $_SESSION['status'] = $msg;
         header("Location: edit.php?autos_id=".htmlentities($_GET['autos_id']));
         return;
       }

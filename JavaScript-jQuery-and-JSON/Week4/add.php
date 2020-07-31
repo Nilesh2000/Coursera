@@ -13,7 +13,7 @@
 
   $_SESSION['color'] = "red";
 
-  if(isset($_POST['first_name']) && isset($_POST['last_name']) && 
+  if( isset($_POST['first_name']) && isset($_POST['last_name']) && 
      isset($_POST['email']) && isset($_POST['headline']) && 
      isset($_POST['summary']) ) {
       

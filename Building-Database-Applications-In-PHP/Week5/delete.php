@@ -3,10 +3,7 @@
   session_start();
 
   require_once 'inc/pdo.php';
-
-  if( !isset($_SESSION['name']) ) {
-    die("ACCESS ERROR");
-  }
+  require_once 'inc/logged_in.php';
 
   if( isset($_GET['autos_id']) ) {
     $auto_id = htmlentities($_GET['autos_id']);

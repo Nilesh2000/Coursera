@@ -19,11 +19,7 @@ for line in fh:
     cur.execute("SELECT count FROM counts WHERE org = ? ", (org,))
     row = cur.fetchone()
     if row is None:
-        cur.execute(
-            "INSERT INTO counts (org, count) VALUES (?, 1)", (org,),
-        )
+        cur.execute("INSERT INTO counts ( org, count ) VALUES ( ?, 1 ) ", (org,))
     else:
-        cur.execute(
-            "UPDATE counts SET count = count + 1 WHERE org = ?", (org,),
-        )
+        cur.execute("UPDATE counts SET count = count + 1 WHERE org = ? ", (org,))
     conn.commit()

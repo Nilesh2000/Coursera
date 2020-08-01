@@ -4,22 +4,25 @@
 
   require_once 'inc/pdo.php';
   require_once 'inc/logged_in.php';
+  require_once 'inc/utilities.php';
   
   if( isset($_POST['cancel']) ) {
     header("Location: view.php");
     return;
   }
 
+  $_SESSION['color'] = "red";
+  
   if( isset($_POST['make']) && isset($_POST['year']) && isset($_POST['mileage']) ) {
 
     if(strlen($_POST['make']) == 0) {
-      $_SESSION['error'] = "Make is required";
+      $_SESSION['status'] = "Make is required";
       header("Location: add.php");
       return;
     }
 
     else if( !is_numeric($_POST['mileage']) || !is_numeric($_POST['year']) ) {
-      $_SESSION['error'] = "Mileage and year must be numeric";
+      $_SESSION['status'] = "Mileage and year must be numeric";
       header("Location: add.php");
       return;
     }
@@ -39,6 +42,7 @@
       ]);
 
       $_SESSION['success'] = "Record inserted";
+      $_SESSION['color']   = "red";
       header("Location: view.php");
       return;
     }
@@ -63,12 +67,7 @@
 
     <h1>Tracking Autos for <?= $_SESSION['name']; ?></h1>
 
-    <?php 
-      if(isset($_SESSION['error'])) {
-        echo('<p style="color: red" class="col-sm-10 col-sm-offset-2">'.$_SESSION['error']."</p>\n");
-        unset($_SESSION['error']);
-      }
-    ?>
+    <?php flashMessage(); ?>
 
     <form method="POST">
 

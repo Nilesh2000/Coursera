@@ -12,7 +12,7 @@
     $status = false;
 
     if(isset($_SESSION['status'])) {
-      $status = htmlentities($_SESSION['status']);
+      $status        = htmlentities($_SESSION['status']);
       $status_colour = htmlentities($_SESSION['color']);
 
       unset($_SESSION['status']);

@@ -11,16 +11,6 @@
     return;
   }
 
-  $status = false;
-
-  if( isset($_SESSION['status']) ) {
-    $status        = htmlentities($_SESSION['status']);
-    $status_colour = htmlentities($_SESSION['color']);
-
-    unset($_SESSION['status']);
-    unset($_SESSION['color']);
-  }
-
   $name = htmlentities($_SESSION['name']);
 
   $_SESSION['color'] = 'red';
@@ -89,11 +79,7 @@
 
     <h1>Editing Automobile</h1>
 
-    <?php 
-      if($status != false) {
-        echo('<p style="color: '.$status_colour.';" class="col-sm-10 col-sm-offset-2">'.htmlentities($status)."</p>\n");
-      }
-    ?>
+    <?php flashMessage(); ?>
 
     <form method="POST">
 

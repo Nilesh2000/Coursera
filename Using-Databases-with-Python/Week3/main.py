@@ -36,7 +36,7 @@ CREATE TABLE Track (
     genre_id  INTEGER,
     len INTEGER, rating INTEGER, count INTEGER
 );
-"""
+    """
 )
 
 

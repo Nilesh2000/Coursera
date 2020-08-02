@@ -10,26 +10,26 @@
   <h1>Welcome to my guessing game</h1>
   <?php 
 
-    if(!isset($_GET['guess'])) {
+    if( !isset($_GET['guess']) ) {
       echo "Missing guess parameter";
       return;
     }
 
-    if(empty($_GET['guess'])) {
+    if( empty($_GET['guess']) ) {
       echo "Your guess is too short";
       return;
     }
 
     $guess = $_GET['guess'];
 
-    if(!is_numeric($guess)) {
+    if( !is_numeric($guess) ) {
       echo "Your guess is not a number";
       return;
     }
 
-    if($guess > 79) {
+    if( $guess > 79 ) {
       echo "Your guess is too high";
-    } else if($guess < 79) {
+    } else if( $guess < 79 ) {
       echo "Your guess is too low";
     } else {
       echo "Congratulations - You are right";

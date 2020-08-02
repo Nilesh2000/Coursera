@@ -27,12 +27,12 @@
         // Possible first two characters in our pre-hashed pin
         for($i = 0 ; $i < 100 ; $i++) {
           $ch1 = $i; // The first two characters
-          if($ch1 < 10) {
+          if( $ch1 < 10 ) {
             $ch1 = "0".$ch1;
           }
           // Inner Loop
           // Last two characters in the pre-hashed in
-          for($j = 0 ; $j < 100 ; $j++) {
+          for( $j = 0 ; $j < 100 ; $j++ ) {
             $ch2 = $j; // The last two characters
             if($ch2 < 10) {
               $ch2 = "0".$ch2;
@@ -46,7 +46,7 @@
               break; // Exit inner loop
             }
 
-            if($show > 0) {
+            if( $show > 0 ) {
               print "$check $pin\n";
               $show = $show - 1;
             }

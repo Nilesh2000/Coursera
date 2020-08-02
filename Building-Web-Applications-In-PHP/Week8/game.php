@@ -1,24 +1,24 @@
 <?php 
 
   // Check for GET paramter
-  if(!isset($_GET['name']) || strlen($_GET['name']) == 0) {
+  if( !isset($_GET['name']) || strlen($_GET['name']) == 0 ) {
     die("Name paramter missing");
   }
 
-  if(isset($_POST['logout'])) {
+  if( isset($_POST['logout']) ) {
     header('Location: index.php');
     return;
   }
 
   $names = array("Rock", "Paper", "Scissors");
   // Check if input has been given
-  $human = isset($_POST['human']) ? $_POST['human'] + 0 : -1;
+  $human    = isset($_POST['human']) ? $_POST['human'] + 0 : -1;
   $computer = rand(0,2); // Generate random play for computer
 
   function check($computer, $human) {
      if($human == $computer) {
       return "Tie";
-    } else if(($human == 0 && $computer == 2) || ($human == 1 && $computer == 0) || ($human == 2 && $computer == 1)) {
+    } else if( ($human == 0 && $computer == 2) || ($human == 1 && $computer == 0) || ($human == 2 && $computer == 1) ) {
       return "You Win";
     } else {
       return "You Lose";
@@ -63,13 +63,13 @@
     <pre>
 <?php
       
-      if($human == -1) { // If none of the options are selected
+      if( $human == -1 ) { // If none of the options are selected
         print "Please select a strategy and press Play.\n";
       }
 
-      else if($human == 3) { // If user wishes to TEST all combinations
-        for($c = 0 ; $c < 3 ; $c++) {
-          for($h = 0 ; $h < 3 ; $h++) {
+      else if( $human == 3 ) { // If user wishes to TEST all combinations
+        for( $c = 0 ; $c < 3 ; $c++ ) {
+          for( $h = 0 ; $h < 3 ; $h++ ) {
             $r = check($c, $h);
             print "Human=$names[$h] Computer=$names[$c] Result=$r";
             echo "<br>";
